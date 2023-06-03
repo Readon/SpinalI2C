@@ -21,7 +21,7 @@ case class I2cMasterStatus() extends Bundle {
 }
 
 case class I2cMasterConfig() extends Bundle {
-  val preScale = UInt(16 bits)
+  val prescale = UInt(16 bits)
   val stopOnIdle = Bool()
 }
 
@@ -52,7 +52,8 @@ class I2cMaster() extends BlackBox {
         "outData_" -> "s_axis_data_",
         "inData_" -> "m_axis_data_",
         "status_" -> "",
-        "config_" -> ""
+        "config_" -> "",
+        "i2c_" -> ""
       )
       name = replacePrefixWithMap(name, prefixMap)
 
@@ -64,7 +65,7 @@ class I2cMaster() extends BlackBox {
         "data_ready" -> "data_tready",
         "data_last" -> "data_tlast",
         "_read" -> "_i",
-        "_write" -> "_o",
+        "_write" -> "_o"
       )
       name = replaceSuffixWithMap(name, suffixMap)
 
