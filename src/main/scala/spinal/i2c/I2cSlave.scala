@@ -2,6 +2,7 @@ package spinal.i2c
 
 import spinal.core._
 import spinal.lib._
+import spinal.lib.com.i2c.I2c
 
 case class I2cSlaveStatus() extends Bundle {
   val busy = Bool()
@@ -25,6 +26,8 @@ class I2cSlave() extends BlackBox {
     val inData = master Stream (Fragment(UInt(8 bits)))
     val status = out(I2cSlaveStatus())
     val config = in(I2cSlaveConfig())
+    
+    val i2c = slave(I2c())
   }
 
   setDefinitionName("i2c_slave")
@@ -52,7 +55,9 @@ class I2cSlave() extends BlackBox {
         "data_fragment" -> "data_tdata",
         "data_valid" -> "data_tvalid",
         "data_ready" -> "data_tready",
-        "data_last" -> "data_tlast"
+        "data_last" -> "data_tlast",
+        "_read" -> "_o",
+        "_write" -> "_i",
       )
       name = replaceSuffixWithMap(name, suffixMap)
 
@@ -72,6 +77,8 @@ object I2cSlaveVerilog {
       i2c.io.inData.setBlocked()
       i2c.io.config.assignDontCare()
       i2c.io.releaseBus.assignDontCare()
+      i2c.io.i2c.scl.write.assignDontCare()
+      i2c.io.i2c.sda.write.assignDontCare()
     })
   }
 }
