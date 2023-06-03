@@ -2,6 +2,7 @@ package spinal.i2c
 
 import spinal.core._
 import spinal.lib._
+import spinal.lib.com.i2c.I2c
 
 case class I2cCommand() extends Bundle {
   val address = UInt(7 bits)
@@ -33,6 +34,8 @@ class I2cMaster() extends BlackBox {
     val inData = master Stream (Fragment(UInt(8 bits)))
     val status = out(I2cMasterStatus())
     val config = in(I2cMasterConfig())
+
+    val i2c = master(I2c())
   }
   setDefinitionName("i2c_master")
   addRTLPath("./rtl/i2c_master.v")
@@ -59,7 +62,9 @@ class I2cMaster() extends BlackBox {
         "data_fragment" -> "data_tdata",
         "data_valid" -> "data_tvalid",
         "data_ready" -> "data_tready",
-        "data_last" -> "data_tlast"
+        "data_last" -> "data_tlast",
+        "_read" -> "_i",
+        "_write" -> "_o",
       )
       name = replaceSuffixWithMap(name, suffixMap)
 
@@ -79,6 +84,8 @@ object I2cMasterVerilog {
       i2c.io.outData.setIdle()
       i2c.io.inData.setBlocked()
       i2c.io.config.assignDontCare()
+      i2c.io.i2c.scl.read.assignDontCare()
+      i2c.io.i2c.sda.read.assignDontCare()
     })
   }
 }
