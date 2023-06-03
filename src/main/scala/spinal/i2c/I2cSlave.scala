@@ -46,7 +46,8 @@ class I2cSlave(filterLen: Int = 4) extends BlackBox {
         "outData_" -> "s_axis_data_",
         "inData_" -> "m_axis_data_",
         "status_" -> "",
-        "config_" -> ""
+        "config_" -> "",
+        "i2c_" -> ""
       )
       name = replacePrefixWithMap(name, prefixMap)
 
