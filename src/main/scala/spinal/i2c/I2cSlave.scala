@@ -27,7 +27,7 @@ class I2cSlave() extends BlackBox {
     val status = out(I2cSlaveStatus())
     val config = in(I2cSlaveConfig())
     
-    val i2c = slave(I2c())
+    val i2c = master(I2c())
   }
 
   setDefinitionName("i2c_slave")
@@ -56,8 +56,8 @@ class I2cSlave() extends BlackBox {
         "data_valid" -> "data_tvalid",
         "data_ready" -> "data_tready",
         "data_last" -> "data_tlast",
-        "_read" -> "_o",
-        "_write" -> "_i",
+        "_read" -> "_i",
+        "_write" -> "_o",
       )
       name = replaceSuffixWithMap(name, suffixMap)
 
@@ -77,8 +77,8 @@ object I2cSlaveVerilog {
       i2c.io.inData.setBlocked()
       i2c.io.config.assignDontCare()
       i2c.io.releaseBus.assignDontCare()
-      i2c.io.i2c.scl.write.assignDontCare()
-      i2c.io.i2c.sda.write.assignDontCare()
+      i2c.io.i2c.scl.read.assignDontCare()
+      i2c.io.i2c.sda.read.assignDontCare()
     })
   }
 }
