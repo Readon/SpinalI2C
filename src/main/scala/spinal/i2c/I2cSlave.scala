@@ -17,7 +17,7 @@ case class I2cSlaveConfig() extends Bundle {
   val deviceAddressMask = UInt(7 bits)
 }
 
-class I2cSlave() extends BlackBox {
+class I2cSlave(filterLen: Int = 4) extends BlackBox {
   val io = new Bundle {
     val clk = in Bool ()
     val rst = in Bool ()
@@ -26,12 +26,13 @@ class I2cSlave() extends BlackBox {
     val inData = master Stream (Fragment(UInt(8 bits)))
     val status = out(I2cSlaveStatus())
     val config = in(I2cSlaveConfig())
-    
+
     val i2c = master(I2c())
   }
 
   setDefinitionName("i2c_slave")
   addRTLPath("./rtl/i2c_slave.v")
+  addGeneric("FILTER_LEN", filterLen)
 
   mapCurrentClockDomain(io.clk, io.rst)
   noIoPrefix()
@@ -57,7 +58,7 @@ class I2cSlave() extends BlackBox {
         "data_ready" -> "data_tready",
         "data_last" -> "data_tlast",
         "_read" -> "_i",
-        "_write" -> "_o",
+        "_write" -> "_o"
       )
       name = replaceSuffixWithMap(name, suffixMap)
 
