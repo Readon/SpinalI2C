@@ -79,6 +79,6 @@ object I2cSlaveVerilog {
       i2c.io.releaseBus.assignDontCare()
       i2c.io.i2c.scl.read.assignDontCare()
       i2c.io.i2c.sda.read.assignDontCare()
-    })
+    }.setDefinitionName("I2cSlave"))
   }
 }

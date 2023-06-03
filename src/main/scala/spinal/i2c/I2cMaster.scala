@@ -86,6 +86,6 @@ object I2cMasterVerilog {
       i2c.io.config.assignDontCare()
       i2c.io.i2c.scl.read.assignDontCare()
       i2c.io.i2c.sda.read.assignDontCare()
-    })
+    }.setDefinitionName("I2cMaster"))
   }
 }
