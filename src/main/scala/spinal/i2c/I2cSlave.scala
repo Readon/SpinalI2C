@@ -20,7 +20,7 @@ class I2cSlave() extends BlackBox {
   val io = new Bundle {
     val clk = in Bool ()
     val rst = in Bool ()
-    val releaseBus = in Bool()
+    val releaseBus = in Bool ()
     val outData = slave Stream (Fragment(UInt(8 bits)))
     val inData = master Stream (Fragment(UInt(8 bits)))
     val status = out(I2cSlaveStatus())
@@ -32,25 +32,6 @@ class I2cSlave() extends BlackBox {
 
   mapCurrentClockDomain(io.clk, io.rst)
   noIoPrefix()
-
-  private def camelToSnake(s: String): String = {
-    val regex = "([a-z])([A-Z])".r
-    regex.replaceAllIn(s, "$1_$2").toLowerCase
-  }
-
-  private def replacePrefixWithMap(str: String, prefixMap: Map[String, String]): String = {
-    prefixMap.find { case (prefix, _) => str.startsWith(prefix) } match {
-      case Some((prefix, replacement)) => replacement + str.drop(prefix.length)
-      case None                        => str
-    }
-  }
-
-  private def replaceSuffixWithMap(str: String, suffixMap: Map[String, String]): String = {
-    suffixMap.find { case (suffix, _) => str.endsWith(suffix) } match {
-      case Some((suffix, replacement)) => str.dropRight(suffix.length) + replacement
-      case None                        => str
-    }
-  }
 
   private def renameIO(): Unit = {
     io.flatten.foreach(bt => {
@@ -86,7 +67,7 @@ class I2cSlave() extends BlackBox {
 object I2cSlaveVerilog {
   def main(args: Array[String]): Unit = {
     SpinalVerilog(new Component {
-      val i2c = new I2cSlave()      
+      val i2c = new I2cSlave()
       i2c.io.outData.setIdle()
       i2c.io.inData.setBlocked()
       i2c.io.config.assignDontCare()
